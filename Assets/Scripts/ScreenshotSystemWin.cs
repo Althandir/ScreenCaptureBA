@@ -122,7 +122,7 @@ public class ScreenshotSystemWin : MonoBehaviour
                     yield return new WaitForSeconds(timeDelay);
                     UnityEngine.Debug.Log("Waited " + timeDelay + " seconds.");
                     UnityEngine.Debug.Log("Capturing Screen...");
-                    ScreenCaptureProcess.StartInfo.FileName = Application.dataPath + "/ScreenCapture.exe";
+                    ScreenCaptureProcess.StartInfo.FileName = Application.streamingAssetsPath + "/ScreenCapture.exe";
                     ScreenCaptureProcess.Start();
 
                     yield return new WaitForSeconds(0.5f);

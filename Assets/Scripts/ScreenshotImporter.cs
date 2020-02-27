@@ -37,16 +37,9 @@ public class ScreenshotImporter : MonoBehaviour
             Destroy(this);
         }
         // TODO::Problem with Build: Paths are not correct. In Build: Screenshot is saved one Directory above Application.dataPath
-        
-        if (isDebug)
-        {
-            path = Application.dataPath + "/LatestScreenshot.png";
-        }
-        else
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(Application.dataPath);
-            path = directoryInfo.Parent.FullName + "/Assets/LatestScreenshot.png";
-        }
+
+        path = Application.streamingAssetsPath + "/LatestScreenshot.png";
+
     }
 
     /// <summary>

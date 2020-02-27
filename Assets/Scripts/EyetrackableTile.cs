@@ -8,7 +8,9 @@ public class EyetrackableTile : MonoBehaviour
 {
     Image image;
 
-
+    bool hasReachedMaxRed;
+    bool hasReachedMaxBlue;
+    bool hasReachedMaxGreen;
     
     #region UnityFunctions
 
@@ -21,7 +23,7 @@ public class EyetrackableTile : MonoBehaviour
 
     public void ChangeColor()
     {
-        image.color = image.color + new Color(0.01f, 0, 0, 0);
+        image.color += new Color(0.01f, 0, 0, 0);
     }
 
 }
