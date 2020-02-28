@@ -110,7 +110,7 @@ public class ScreenshotSystemWin : MonoBehaviour
             isActive = true;
             while (true)
             {
-                // If ScreenshotImporter is not free or Systen is in Calibrationmode or System displays the Trackbox
+                // If ScreenshotImporter is not ready or Systen is in Calibrationmode or System displays the Trackbox
                 // TODO: Create UI System for this! 
                 if (ScreenshotImporter.Instance.Locked || Calibration.Instance.CalibrationInProgress || TrackBoxGuide.Instance.TrackBoxGuideActive)
                 {

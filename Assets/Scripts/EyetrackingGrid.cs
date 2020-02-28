@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public class EyetrackingGrid : MonoBehaviour
 {
-    [SerializeField] GameObject EyetrackableTile;
+    [SerializeField] GameObject EyetrackableTile = null;
     [Range(4, 10)]
-    [SerializeField] int accuracy;
+    [SerializeField] int accuracy = 10;
     int counter = 0;
 
     void Start()
