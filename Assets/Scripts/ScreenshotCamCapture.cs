@@ -2,22 +2,29 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ScreenshotCamCapture : MonoBehaviour
 {
-    static int count;
+    static int _count;
 
-    string totalPath;
-    string screenshotPath;
-    Texture2D texture;
-    byte[] screenshotBytes;
-    public static ScreenshotCamCapture Instance;
+    string _totalPath;
+    string _screenshotPath;
+    Texture2D _texture;
+    byte[] _screenshotBytes;
+
+    UnityEvent _onSaveEvent = new UnityEvent();
+
+    private static ScreenshotCamCapture _instance;
+
+    public UnityEvent OnSaveEvent { get => _onSaveEvent; }
+    public static ScreenshotCamCapture Instance { get => _instance; set => _instance = value; }
 
     private void Awake()
     {
-        if (!Instance)
+        if (!_instance)
         {
-            Instance = this;
+            _instance = this;
         }
         else
         {
@@ -25,11 +32,11 @@ public class ScreenshotCamCapture : MonoBehaviour
             Destroy(this);
         }
 
-        screenshotPath = Application.dataPath + "/Screenshots";
+        _screenshotPath = Application.dataPath + "/Screenshots";
 
-        if (!Directory.Exists(screenshotPath))
+        if (!Directory.Exists(_screenshotPath))
         {
-            Directory.CreateDirectory(screenshotPath);
+            Directory.CreateDirectory(_screenshotPath);
         }
     }
 
@@ -42,18 +49,20 @@ public class ScreenshotCamCapture : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         
-        texture = ScreenCapture.CaptureScreenshotAsTexture();
+        _texture = ScreenCapture.CaptureScreenshotAsTexture();
 
-        screenshotBytes = texture.EncodeToPNG();
+        _screenshotBytes = _texture.EncodeToJPG();
 
-        totalPath = screenshotPath + "/_" + count + ".png";
+        _totalPath = _screenshotPath + "/_" + _count + ".jpg";
 
-        File.WriteAllBytes(totalPath, screenshotBytes);
-        
-        Array.Clear(screenshotBytes, 0, screenshotBytes.Length);
+        File.WriteAllBytes(_totalPath, _screenshotBytes);
+
+        _onSaveEvent.Invoke();
+
+        Array.Clear(_screenshotBytes, 0, _screenshotBytes.Length);
         
         Resources.UnloadUnusedAssets();
 
-        count += 1;
+        _count += 1;
     }
 }

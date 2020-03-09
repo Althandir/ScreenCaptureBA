@@ -9,12 +9,12 @@ using UnityEngine;
 /// </summary>
 public class ScreenshotImporter : MonoBehaviour
 {
-    private bool LockFile;
-    private Sprite OutputSprite;
-    private bool isDebug;
-    private string path;
-    public Sprite Output { get => OutputSprite;}
-    public bool Locked { get => LockFile;}
+    private bool _lockFile;
+    private Sprite _outputSprite;
+    private bool _isDebug;
+    private string _path;
+    public Sprite Output { get => _outputSprite;}
+    public bool Locked { get => _lockFile;}
 
     public static ScreenshotImporter Instance;
 
@@ -22,9 +22,9 @@ public class ScreenshotImporter : MonoBehaviour
     private void Awake()
     {
         #if UNITY_EDITOR
-        isDebug = true;
+        _isDebug = true;
         #else
-        isDebug = false;
+        _isDebug = false;
         #endif
 
         if (!Instance)
@@ -38,7 +38,7 @@ public class ScreenshotImporter : MonoBehaviour
         }
         // TODO::Problem with Build: Paths are not correct. In Build: Screenshot is saved one Directory above Application.dataPath
 
-        path = Application.streamingAssetsPath + "/LatestScreenshot.png";
+        _path = Application.streamingAssetsPath + "/LatestScreenshot.png";
 
     }
 
@@ -56,17 +56,17 @@ public class ScreenshotImporter : MonoBehaviour
     {
         try
         {
-            LockFile = true;
+            _lockFile = true;
 
-            byte[] latestScreenshotBytes = File.ReadAllBytes(path);
+            byte[] latestScreenshotBytes = File.ReadAllBytes(_path);
 
             Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
             texture.LoadImage(latestScreenshotBytes);
             // Array.Clear to prevent MemoryLeak inside Unity
             Array.Clear(latestScreenshotBytes, 0, latestScreenshotBytes.Length);
-            LockFile = false;
+            _lockFile = false;
             // /6 to prevent Exception at Sprite.Create if Captured Screen is to small
-            OutputSprite = Sprite.Create(texture, new Rect(0, 0, Screen.width/6, Screen.height/6), Vector2.zero,100);
+            _outputSprite = Sprite.Create(texture, new Rect(0, 0, Screen.width/6, Screen.height/6), Vector2.zero,100);
         }
         catch (System.Exception e)
         {

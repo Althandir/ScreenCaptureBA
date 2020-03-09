@@ -7,35 +7,54 @@ using UnityEngine;
 /// </summary>
 public class EyetrackingGrid : MonoBehaviour
 {
-    [SerializeField] GameObject EyetrackableTile = null;
+    [SerializeField] GameObject _EyetrackableTile = null;
     [Range(4, 10)]
-    [SerializeField] int accuracy = 10;
-    int counter = 0;
+    [SerializeField] int _accuracy = 0;
+    int _counter = 0;
 
     void Start()
     {
-        float[] xMinValues = new float[accuracy];
-        float[] yMinValues = new float[accuracy];
+        ReadSettings();
+        SetupGrid();
+    }
 
-        float[] xMaxValues = new float[accuracy];
-        float[] yMaxValues = new float[accuracy];
-
-        for (int i = 0; i < accuracy; i++)
+    void ReadSettings()
+    {
+        if (_accuracy == 0 && ScreenshotSystemSettings.Instance)
         {
-            xMinValues[i] = (float) i / accuracy;
-            yMinValues[i] = (float) i / accuracy;
-
-            xMaxValues[i] = (float)(i + 1) / accuracy;
-            yMaxValues[i] = (float)(i + 1) / accuracy;
+            _accuracy = ScreenshotSystemSettings.Instance.GridAccuracy;
         }
-        for (int i = 0; i < accuracy; ++i)
+        else
         {
-            for (int k = 0; k < accuracy; ++k)
-            {
-                GameObject tile = Instantiate(EyetrackableTile, this.transform);
+            _accuracy = 10;
+            Debug.LogError("Could not find ScreenshotSystemSettings. Using max Value.");
+        }
+    }
 
-                tile.name = "Tile_" + counter;
-                counter += 1;
+    void SetupGrid()
+    {
+        float[] xMinValues = new float[_accuracy];
+        float[] yMinValues = new float[_accuracy];
+
+        float[] xMaxValues = new float[_accuracy];
+        float[] yMaxValues = new float[_accuracy];
+
+        for (int i = 0; i < _accuracy; i++)
+        {
+            xMinValues[i] = (float)i / _accuracy;
+            yMinValues[i] = (float)i / _accuracy;
+
+            xMaxValues[i] = (float)(i + 1) / _accuracy;
+            yMaxValues[i] = (float)(i + 1) / _accuracy;
+        }
+        for (int i = 0; i < _accuracy; ++i)
+        {
+            for (int k = 0; k < _accuracy; ++k)
+            {
+                GameObject tile = Instantiate(_EyetrackableTile, this.transform);
+
+                tile.name = "Tile_" + _counter;
+                _counter += 1;
 
                 RectTransform rectTransform = tile.GetComponent<RectTransform>();
                 rectTransform.anchorMin = new Vector2(xMinValues[i], yMinValues[k]);
@@ -43,6 +62,5 @@ public class EyetrackingGrid : MonoBehaviour
             }
 
         }
-
     }
 }

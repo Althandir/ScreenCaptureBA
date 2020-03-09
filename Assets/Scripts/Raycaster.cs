@@ -5,12 +5,12 @@ using Tobii.Research.Unity;
 
 public class Raycaster : MonoBehaviour
 {
-    IGazeData data;
-    IEnumerator RaycastRoutine;
+    IGazeData _data;
+    IEnumerator _raycastRoutine;
 
     private void Awake()
     {
-        RaycastRoutine = MainRaycastRoutine();
+        _raycastRoutine = MainRaycastRoutine();
     }
 
     private void Start()
@@ -20,41 +20,39 @@ public class Raycaster : MonoBehaviour
 
     private void OnStart()
     {
-        StartCoroutine(RaycastRoutine);
+        StartCoroutine(_raycastRoutine);
     }
 
     IEnumerator MainRaycastRoutine()
     {
         while (true)
         {
-            if (Calibration.Instance.CalibrationInProgress )
+            if (Calibration.Instance.CalibrationInProgress || TrackBoxGuide.Instance.TrackBoxGuideActive)
             {
                 yield return new WaitForEndOfFrame();
             }
             else
             {
-                data = EyeTracker.Instance.LatestGazeData;
+                _data = EyeTracker.Instance.LatestGazeData;
                 RaycastHit2D hit2D;
-                if (data.CombinedGazeRayScreenValid)
+                if (_data.CombinedGazeRayScreenValid)
                 {
                     Debug.Log("Eyedata valid");
-                    hit2D = Physics2D.Raycast(data.CombinedGazeRayScreen.origin, data.CombinedGazeRayScreen.direction);
-                    Debug.Log("Combined Origin:" + data.CombinedGazeRayScreen.origin + " | Combined dest: " + data.CombinedGazeRayScreen.direction);
+                    hit2D = Physics2D.Raycast(_data.CombinedGazeRayScreen.origin, Vector2.zero );
+                    Debug.DrawLine(_data.CombinedGazeRayScreen.origin, Vector2.zero, Color.red, 100);
+                    CheckHit2D(hit2D);
+                }
+                else if (_data.Left.GazePointValid)
+                {
+                    Debug.LogWarning("Right eye invalid");
+                    hit2D = Physics2D.Raycast(_data.Left.GazeRayScreen.origin, Vector2.zero);
 
                     CheckHit2D(hit2D);
                 }
-                else if (data.Left.GazePointValid)
-                {
-                    Debug.LogWarning("Right eye invalid");
-                    hit2D = Physics2D.Raycast(data.Left.GazeRayScreen.origin, data.Left.GazeRayScreen.direction);
-                    Debug.Log("Left Origin:" + data.Left.GazeRayScreen.origin + " | left dest: " + data.Left.GazeRayScreen.direction);
-                    CheckHit2D(hit2D);
-                }
-                else if (data.Right.GazePointValid)
+                else if (_data.Right.GazePointValid)
                 {
                     Debug.LogWarning("Left eye invalid");
-                    hit2D = Physics2D.Raycast(data.Right.GazeRayScreen.origin, data.Right.GazeRayScreen.direction);
-                    Debug.Log("right Origin:" + data.Right.GazeRayScreen.origin + " | right dest: " + data.Right.GazeRayScreen.direction);
+                    hit2D = Physics2D.Raycast(_data.Right.GazeRayScreen.origin, Vector2.zero);
                     CheckHit2D(hit2D);
                 }
                 else

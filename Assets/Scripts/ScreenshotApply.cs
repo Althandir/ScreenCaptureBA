@@ -6,16 +6,16 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class ScreenshotApply : MonoBehaviour
 {
-    Image image;
+    Image _image;
 
     private void Awake()
     {
-        image = GetComponent<Image>();
+        _image = GetComponent<Image>();
     }
 
     private void LateUpdate()
     {
-        image.sprite = ScreenshotImporter.Instance.Output;
-        image.type = Image.Type.Tiled;
+        _image.sprite = ScreenshotImporter.Instance.Output;
+        _image.type = Image.Type.Tiled;
     }
 }

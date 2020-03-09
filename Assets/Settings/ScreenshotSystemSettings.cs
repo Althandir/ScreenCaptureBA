@@ -10,14 +10,6 @@ public class ScreenshotSystemSettings : MonoBehaviour
     private SettingsData m_settingsData = new SettingsData();
     private string m_saveDir = string.Empty;
 
-    public string FileName 
-    { 
-        get => m_settingsData.fileName;
-        set 
-        { 
-            m_settingsData.fileName = value + ".json";
-        }
-    }
     public int GridAccuracy
     {
         get => m_settingsData.gridAccuracy;
@@ -51,23 +43,26 @@ public class ScreenshotSystemSettings : MonoBehaviour
         }
     }
 
-    public void SaveToDisk()
+    /// <summary>
+    /// Method to save the settings. Returns true when successful, false if file already exists
+    /// </summary>
+    public bool SaveToDisk(string fileName)
     {
-        string totalPath = m_saveDir + "/" + m_settingsData.fileName;
-
-        if (m_settingsData.fileName == string.Empty)
+        if (!fileName.Contains(".json"))
         {
-            Debug.LogError("No Filename was specified!");
+            fileName += ".json";
         }
-        else if (System.IO.File.Exists(totalPath))
+
+        string totalPath = m_saveDir + "/" + fileName;
+
+        if (System.IO.File.Exists(totalPath))
         {
-            Debug.Log("File already exists.");
-            // TODO: Add override system & UI
-            Save(totalPath);
+            return false;
         }
         else
         {
             Save(totalPath);
+            return true;
         }
     }
 
@@ -78,7 +73,12 @@ public class ScreenshotSystemSettings : MonoBehaviour
         Debug.Log("Settings saved in: " + path);
     }
 
-    public void LoadFromDisk(string fileName)
+    /// <summary>
+    /// Loads the given File into settings. Returns true if successful, false if File not found. 
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
+    public bool LoadFromDisk(string fileName)
     {
         if (!fileName.Contains(".json"))
         {
@@ -89,10 +89,12 @@ public class ScreenshotSystemSettings : MonoBehaviour
         if (System.IO.File.Exists(totalPath))
         {
             Load(totalPath);
+            return true;
         }
         else
         {
             Debug.LogError("Could not find specified file in: " + totalPath);
+            return false;
         }
     }
 
@@ -109,14 +111,10 @@ public class ScreenshotSystemSettings : MonoBehaviour
 public class SettingsData
 {
     /// <summary>
-    /// Name of File where Settings are stored
-    /// </summary>
-    public string fileName = "test.json";
-    /// <summary>
     /// Accuracy of the EyetrackingGrid
     /// </summary>
     [Range(4, 10)]
-    public int gridAccuracy = 4;
+    public int gridAccuracy = 10;
 
     public override string ToString()
     {

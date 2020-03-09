@@ -3,7 +3,7 @@
 public class EmergenyExit : MonoBehaviour
 {
     [SerializeField] KeyCode ExitKey;
-    bool exitPressed;
+    bool _exitPressed;
 
     private void Awake()
     {
@@ -17,10 +17,10 @@ public class EmergenyExit : MonoBehaviour
     {
         if (Input.GetKeyDown(ExitKey))
         {
-            exitPressed = true;
+            _exitPressed = true;
         }
 
-        if (exitPressed)
+        if (_exitPressed)
         {
             #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
