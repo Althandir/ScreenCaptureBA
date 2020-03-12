@@ -11,11 +11,12 @@ public class ScreenshotApply : MonoBehaviour
     private void Awake()
     {
         _image = GetComponent<Image>();
+
     }
 
     private void LateUpdate()
     {
         _image.sprite = ScreenshotImporter.Instance.Output;
-        _image.type = Image.Type.Tiled;
+        _image.type = Image.Type.Simple;
     }
 }

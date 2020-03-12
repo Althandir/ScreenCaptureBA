@@ -5,20 +5,26 @@ using UnityEngine;
 
 public class ScreenshotSystemSettings : MonoBehaviour
 {
-    private static ScreenshotSystemSettings m_instance;
+    private static ScreenshotSystemSettings _instance;
 
-    private SettingsData m_settingsData = new SettingsData();
-    private string m_saveDir = string.Empty;
+    private SettingsData _settingsData = new SettingsData();
+    private string _saveDir = string.Empty;
 
     public int GridAccuracy
     {
-        get => m_settingsData.gridAccuracy;
+        get => _settingsData.gridAccuracy;
         set
         {
-            m_settingsData.gridAccuracy = value;
+            _settingsData.gridAccuracy = value;
         }
     }
-    public static ScreenshotSystemSettings Instance { get => m_instance; set => m_instance = value; }
+    public float TimeDelay
+    {
+        get => _settingsData.timeDelay;
+        set => _settingsData.timeDelay = value;
+    }
+
+    public static ScreenshotSystemSettings Instance { get => _instance; }
 
     private void Awake()
     {
@@ -29,17 +35,18 @@ public class ScreenshotSystemSettings : MonoBehaviour
         }
         else
         {
-            m_saveDir = Application.persistentDataPath + "/settings";
-            Instance = this;
+            _saveDir = Application.persistentDataPath + "/settings";
+            _instance = this;
             DontDestroyOnLoad(this);
+            Application.runInBackground = true;
         }
     }
 
     private void Start()
     {
-        if (!System.IO.Directory.Exists(m_saveDir))
+        if (!System.IO.Directory.Exists(_saveDir))
         {
-            System.IO.Directory.CreateDirectory(m_saveDir);
+            System.IO.Directory.CreateDirectory(_saveDir);
         }
     }
 
@@ -53,7 +60,7 @@ public class ScreenshotSystemSettings : MonoBehaviour
             fileName += ".json";
         }
 
-        string totalPath = m_saveDir + "/" + fileName;
+        string totalPath = _saveDir + "/" + fileName;
 
         if (System.IO.File.Exists(totalPath))
         {
@@ -68,7 +75,7 @@ public class ScreenshotSystemSettings : MonoBehaviour
 
     private void Save(string path)
     {
-        string json = JsonUtility.ToJson(m_settingsData);
+        string json = JsonUtility.ToJson(_settingsData);
         System.IO.File.WriteAllText(path, json);
         Debug.Log("Settings saved in: " + path);
     }
@@ -84,7 +91,7 @@ public class ScreenshotSystemSettings : MonoBehaviour
         {
             fileName += ".json";
         }
-        string totalPath = m_saveDir + "/" + fileName;
+        string totalPath = _saveDir + "/" + fileName;
 
         if (System.IO.File.Exists(totalPath))
         {
@@ -101,9 +108,9 @@ public class ScreenshotSystemSettings : MonoBehaviour
     private void Load(string path)
     {
         SettingsData loadedData = JsonUtility.FromJson<SettingsData>(System.IO.File.ReadAllText(path));
-        Instance.m_settingsData = loadedData;
+        Instance._settingsData = loadedData;
         Debug.Log("Settings loaded from: " + path);
-        Debug.Log(m_settingsData);
+        Debug.Log(_settingsData);
     }
 }
 
@@ -114,8 +121,9 @@ public class SettingsData
     /// Accuracy of the EyetrackingGrid
     /// </summary>
     [Range(4, 10)]
-    public int gridAccuracy = 10;
-
+    public int gridAccuracy;
+    [Range(0.5f, 2f)]
+    public float timeDelay;
     public override string ToString()
     {
         return JsonUtility.ToJson(this);

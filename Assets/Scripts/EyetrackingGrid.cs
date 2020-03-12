@@ -8,7 +8,7 @@ using UnityEngine;
 public class EyetrackingGrid : MonoBehaviour
 {
     [SerializeField] GameObject _EyetrackableTile = null;
-    [Range(4, 10)]
+    [Range(4, 8)]
     [SerializeField] int _accuracy = 0;
     int _counter = 0;
 
@@ -26,7 +26,7 @@ public class EyetrackingGrid : MonoBehaviour
         }
         else
         {
-            _accuracy = 10;
+            _accuracy = 8;
             Debug.LogError("Could not find ScreenshotSystemSettings. Using max Value.");
         }
     }

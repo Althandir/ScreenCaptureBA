@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows;
 using UnityEngine;
 
 /// <summary>
@@ -9,12 +10,12 @@ using UnityEngine;
 /// </summary>
 public class ScreenshotImporter : MonoBehaviour
 {
-    private bool _lockFile;
+    private bool _lock;
     private Sprite _outputSprite;
     private bool _isDebug;
     private string _path;
     public Sprite Output { get => _outputSprite;}
-    public bool Locked { get => _lockFile;}
+    public bool Locked { get => _lock;}
 
     public static ScreenshotImporter Instance;
 
@@ -46,7 +47,7 @@ public class ScreenshotImporter : MonoBehaviour
     /// Reading screenshot from disk. 
     /// </summary>
     /// <remarks>
-    /// High Risk of Memory Leaks. 
+    /// High Risk of Memory Leak. 
     /// See:
     /// https://docs.unity3d.com/Packages/com.unity.memoryprofiler@0.1/manual/workflow-memory-leaks.html
     /// Sources & Ideas
@@ -56,17 +57,16 @@ public class ScreenshotImporter : MonoBehaviour
     {
         try
         {
-            _lockFile = true;
+            _lock = true;
 
             byte[] latestScreenshotBytes = File.ReadAllBytes(_path);
 
-            Texture2D texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            Texture2D texture = new Texture2D(Screen.currentResolution.width, Screen.currentResolution.height, TextureFormat.RGB24, false);
             texture.LoadImage(latestScreenshotBytes);
             // Array.Clear to prevent MemoryLeak inside Unity
             Array.Clear(latestScreenshotBytes, 0, latestScreenshotBytes.Length);
-            _lockFile = false;
-            // /6 to prevent Exception at Sprite.Create if Captured Screen is to small
-            _outputSprite = Sprite.Create(texture, new Rect(0, 0, Screen.width/6, Screen.height/6), Vector2.zero,100);
+            _lock = false;
+            _outputSprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero,100);
         }
         catch (System.Exception e)
         {

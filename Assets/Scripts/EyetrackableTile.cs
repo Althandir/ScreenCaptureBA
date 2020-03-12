@@ -29,6 +29,8 @@ public class EyetrackableTile : MonoBehaviour
     {
         SetupCollider();
         ScreenshotCamCapture.Instance.OnSaveEvent.AddListener(OnSaveHandler);
+
+        _colorInterval = _colorInterval / ScreenshotSystemWin.Instance.TimeDelay;
     }
 
     private void OnApplicationFocus(bool focus)
@@ -61,7 +63,7 @@ public class EyetrackableTile : MonoBehaviour
         {
             if (_image.color.g < 0.5f)
             {
-                _image.color += new Color(0, 0.5f, 0, 0);
+                _image.color += new Color(0, 0.7f, 0, 0);
             }
             else
             {

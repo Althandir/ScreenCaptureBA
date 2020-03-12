@@ -9,17 +9,20 @@ public class ScreenshotSystemWin : MonoBehaviour
 {
     [Header("Settings:")]
     [Tooltip("If the ScreenshotSystem should be started on immediately")]
-    public bool StartOnAwake;
+    public bool _StartOnAwake;
     [Tooltip("Time between each Screenshot")]
-    [Range(1, 3)]
-    [SerializeField] float timeDelay = 1;
+    [Range(0.5f, 3)]
+    [SerializeField] float _timeDelay = 0;
 
     [Header("Debug:")]
-    [SerializeField] private bool isActive;
-    Process ScreenCaptureProcess = new Process();
-    IEnumerator CreateScreenshotRoutine;
+    [SerializeField] private bool _isActive;
+    Process _screenCaptureProcess = new Process();
+    IEnumerator _createScreenshotRoutine;
 
     public static ScreenshotSystemWin Instance;
+
+    public float TimeDelay { get => _timeDelay;}
+
     #region UnityFunctions
     private void Awake()
     {
@@ -33,16 +36,22 @@ public class ScreenshotSystemWin : MonoBehaviour
             UnityEngine.Debug.LogWarning("Double ScreenshotSystemWin detected!");
             Destroy(this);
         }
-        // Referencing Routine for stopping
-        CreateScreenshotRoutine = CreateScreenshotCoroutine();
+        // Referencing Routine
+        _createScreenshotRoutine = CreateScreenshotCoroutine();
     }
 
     void Start()
     {
-        Application.runInBackground = true;
-        
+        if (ScreenshotSystemSettings.Instance)
+        {
+            // Read settings
+            _timeDelay = ScreenshotSystemSettings.Instance.TimeDelay;
+        }
 
-        if (StartOnAwake)
+        Application.runInBackground = true;
+
+        // Start Coroutine
+        if (_StartOnAwake)
         {
             StartCoroutine(StartScreenshotRoutine());
         }
@@ -50,7 +59,7 @@ public class ScreenshotSystemWin : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        isActive = false;
+        _isActive = false;
         StopAllCoroutines();
     }
     #endregion
@@ -79,7 +88,7 @@ public class ScreenshotSystemWin : MonoBehaviour
     {
         while (true)
         {
-            if (timeDelay < 1)
+            if (_timeDelay < 0.5f)
             {
                 UnityEngine.Debug.LogError("Could not start Screenshotroutine, because timeDelay is near zero. Would take tooo much ressources.");
                 yield return null;
@@ -87,7 +96,7 @@ public class ScreenshotSystemWin : MonoBehaviour
 
             if (CheckForEyeTracker())
             {
-                StartCoroutine(CreateScreenshotRoutine);
+                StartCoroutine(_createScreenshotRoutine);
                 break;
             }
 
@@ -100,14 +109,14 @@ public class ScreenshotSystemWin : MonoBehaviour
     /// </summary>
     IEnumerator CreateScreenshotCoroutine()
     {
-        if (isActive)
+        if (_isActive)
         {
             // Prevents duplicated activation of Routine
             yield return null;
         }
         else
         {
-            isActive = true;
+            _isActive = true;
             while (true)
             {
                 // If ScreenshotImporter is not ready or Systen is in Calibrationmode or System displays the Trackbox
@@ -119,17 +128,17 @@ public class ScreenshotSystemWin : MonoBehaviour
                 }
                 else
                 {
-                    yield return new WaitForSeconds(timeDelay);
-                    UnityEngine.Debug.Log("Waited " + timeDelay + " seconds.");
+                    yield return new WaitForSeconds(_timeDelay);
+                    UnityEngine.Debug.Log("Waited " + _timeDelay + " seconds.");
                     UnityEngine.Debug.Log("Capturing Screen...");
-                    ScreenCaptureProcess.StartInfo.FileName = Application.streamingAssetsPath + "/ScreenCapture.exe";
-                    ScreenCaptureProcess.Start();
+                    _screenCaptureProcess.StartInfo.FileName = Application.streamingAssetsPath + "/ScreenCapture.exe";
+                    _screenCaptureProcess.Start();
 
                     yield return new WaitForSeconds(0.5f);
 
                     ScreenshotImporter.Instance.ImportScreenshot();
                     UnityEngine.Debug.Log("Screen imported...");
-                    ScreenshotCamCapture.Instance.CaptureWithEyetrackingUI();
+                    ScreenshotCamCapture.Instance.CaptureWithHeatmap();
                     UnityEngine.Debug.Log("Screen with EyetrackingUI saved.");
                 }
             }

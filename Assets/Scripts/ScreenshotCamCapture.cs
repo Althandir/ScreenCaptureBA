@@ -12,6 +12,7 @@ public class ScreenshotCamCapture : MonoBehaviour
     string _screenshotPath;
     Texture2D _texture;
     byte[] _screenshotBytes;
+    float _timeStamp;
 
     UnityEvent _onSaveEvent = new UnityEvent();
 
@@ -40,7 +41,12 @@ public class ScreenshotCamCapture : MonoBehaviour
         }
     }
 
-    public void CaptureWithEyetrackingUI()
+    private void Start()
+    {
+        _timeStamp = ScreenshotSystemWin.Instance.TimeDelay;
+    }
+
+    public void CaptureWithHeatmap()
     {
         StartCoroutine(Capture());
     }
@@ -51,9 +57,9 @@ public class ScreenshotCamCapture : MonoBehaviour
         
         _texture = ScreenCapture.CaptureScreenshotAsTexture();
 
-        _screenshotBytes = _texture.EncodeToJPG();
+        _screenshotBytes = _texture.EncodeToPNG();
 
-        _totalPath = _screenshotPath + "/_" + _count + ".jpg";
+        _totalPath = _screenshotPath + "/_num" + _count + "_sec" + _timeStamp + ".png";
 
         File.WriteAllBytes(_totalPath, _screenshotBytes);
 
@@ -64,5 +70,7 @@ public class ScreenshotCamCapture : MonoBehaviour
         Resources.UnloadUnusedAssets();
 
         _count += 1;
+
+        _timeStamp += ScreenshotSystemWin.Instance.TimeDelay;
     }
 }
