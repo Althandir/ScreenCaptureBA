@@ -32,18 +32,35 @@ public class ScreenshotCamCapture : MonoBehaviour
             Debug.LogWarning("Double ScreenshotCamCapture detected!");
             Destroy(this);
         }
-
-        _screenshotPath = Application.dataPath + "/Screenshots";
-
-        if (!Directory.Exists(_screenshotPath))
-        {
-            Directory.CreateDirectory(_screenshotPath);
-        }
     }
 
     private void Start()
     {
         _timeStamp = ScreenshotSystemWin.Instance.TimeDelay;
+        // Idea from: https://stackoverflow.com/questions/22225044/creating-a-new-folder-with-todays-date-on-specific-folder
+        if (ScreenshotSystemSettings.Instance)
+        {
+            _screenshotPath = Application.persistentDataPath +"/"+ ScreenshotSystemSettings.Instance.OwnerName;
+            if (!Directory.Exists(_screenshotPath))
+            {
+                Directory.CreateDirectory(_screenshotPath);
+            }
+        }
+        else
+        {
+            _screenshotPath = Application.persistentDataPath + "/debug";
+            if (!Directory.Exists(_screenshotPath))
+            {
+                Directory.CreateDirectory(_screenshotPath);
+            }
+        }
+
+        string dateTime = DateTime.Now.ToString("dd-MM-yyyy_hh-mm");
+        _screenshotPath += "/" + dateTime;
+        if (!Directory.Exists(_screenshotPath))
+        {
+            Directory.CreateDirectory(_screenshotPath);
+        }
     }
 
     public void CaptureWithHeatmap()

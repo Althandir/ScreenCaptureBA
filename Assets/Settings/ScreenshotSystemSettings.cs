@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Tobii.Research.Unity;
 
 public class ScreenshotSystemSettings : MonoBehaviour
 {
@@ -24,6 +24,12 @@ public class ScreenshotSystemSettings : MonoBehaviour
         set => _settingsData.timeDelay = value;
     }
 
+    public string OwnerName
+    {
+        get => _settingsData.ownerName;
+        set => _settingsData.ownerName = value;
+    }
+
     public static ScreenshotSystemSettings Instance { get => _instance; }
 
     private void Awake()
@@ -37,7 +43,7 @@ public class ScreenshotSystemSettings : MonoBehaviour
         {
             _saveDir = Application.persistentDataPath + "/settings";
             _instance = this;
-            DontDestroyOnLoad(this);
+
             Application.runInBackground = true;
         }
     }
@@ -48,6 +54,11 @@ public class ScreenshotSystemSettings : MonoBehaviour
         {
             System.IO.Directory.CreateDirectory(_saveDir);
         }
+
+        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(EyeTracker.Instance);
+        DontDestroyOnLoad(Calibration.Instance);
+        DontDestroyOnLoad(TrackBoxGuide.Instance);
     }
 
     /// <summary>
@@ -118,12 +129,20 @@ public class ScreenshotSystemSettings : MonoBehaviour
 public class SettingsData
 {
     /// <summary>
+    /// Name of the owner of the data
+    /// </summary>
+    public string ownerName;
+    /// <summary>
     /// Accuracy of the EyetrackingGrid
     /// </summary>
     [Range(4, 10)]
     public int gridAccuracy;
+    /// <summary>
+    /// TimeDelay between each Screenshot
+    /// </summary>
     [Range(0.5f, 2f)]
     public float timeDelay;
+
     public override string ToString()
     {
         return JsonUtility.ToJson(this);
