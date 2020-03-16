@@ -8,8 +8,8 @@ public class ScreenshotCamCapture : MonoBehaviour
 {
     static int _count;
 
-    string _totalPath;
     string _screenshotPath;
+    string _path;
     Texture2D _texture;
     byte[] _screenshotBytes;
     float _timeStamp;
@@ -19,7 +19,9 @@ public class ScreenshotCamCapture : MonoBehaviour
     private static ScreenshotCamCapture _instance;
 
     public UnityEvent OnSaveEvent { get => _onSaveEvent; }
-    public static ScreenshotCamCapture Instance { get => _instance; set => _instance = value; }
+    public static ScreenshotCamCapture Instance { get => _instance; }
+    public float TimeStamp { get => _timeStamp; }
+    public string Path { get => _path; }
 
     private void Awake()
     {
@@ -40,26 +42,26 @@ public class ScreenshotCamCapture : MonoBehaviour
         // Idea from: https://stackoverflow.com/questions/22225044/creating-a-new-folder-with-todays-date-on-specific-folder
         if (ScreenshotSystemSettings.Instance)
         {
-            _screenshotPath = Application.persistentDataPath +"/"+ ScreenshotSystemSettings.Instance.OwnerName;
-            if (!Directory.Exists(_screenshotPath))
+            _path = Application.persistentDataPath +"/"+ ScreenshotSystemSettings.Instance.OwnerName;
+            if (!Directory.Exists(_path))
             {
-                Directory.CreateDirectory(_screenshotPath);
+                Directory.CreateDirectory(_path);
             }
         }
         else
         {
-            _screenshotPath = Application.persistentDataPath + "/debug";
-            if (!Directory.Exists(_screenshotPath))
+            _path = Application.persistentDataPath + "/debug";
+            if (!Directory.Exists(_path))
             {
-                Directory.CreateDirectory(_screenshotPath);
+                Directory.CreateDirectory(_path);
             }
         }
 
         string dateTime = DateTime.Now.ToString("dd-MM-yyyy_hh-mm");
-        _screenshotPath += "/" + dateTime;
-        if (!Directory.Exists(_screenshotPath))
+        _path += "/" + dateTime;
+        if (!Directory.Exists(_path))
         {
-            Directory.CreateDirectory(_screenshotPath);
+            Directory.CreateDirectory(_path);
         }
     }
 
@@ -76,9 +78,9 @@ public class ScreenshotCamCapture : MonoBehaviour
 
         _screenshotBytes = _texture.EncodeToPNG();
 
-        _totalPath = _screenshotPath + "/_num" + _count + "_sec" + _timeStamp + ".png";
+        _screenshotPath = _path + "/_num" + _count + "_sec" + _timeStamp + ".png";
 
-        File.WriteAllBytes(_totalPath, _screenshotBytes);
+        File.WriteAllBytes(_screenshotPath, _screenshotBytes);
 
         _onSaveEvent.Invoke();
 

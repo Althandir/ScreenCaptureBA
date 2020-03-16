@@ -30,6 +30,18 @@ public class ScreenshotSystemSettings : MonoBehaviour
         set => _settingsData.ownerName = value;
     }
 
+    public bool CatchHeatmap
+    {
+        get => _settingsData.catchHeatmap;
+        set => _settingsData.catchHeatmap = value;
+    }
+
+    public bool CatchPupils
+    {
+        get => _settingsData.catchPupils;
+        set => _settingsData.catchPupils = value;
+    }
+
     public static ScreenshotSystemSettings Instance { get => _instance; }
 
     private void Awake()
@@ -142,6 +154,14 @@ public class SettingsData
     /// </summary>
     [Range(0.5f, 2f)]
     public float timeDelay;
+    /// <summary>
+    /// Should heatmaps be created?
+    /// </summary>
+    public bool catchHeatmap;
+    /// <summary>
+    /// Should the pupil diameter be catched?
+    /// </summary>
+    public bool catchPupils;
 
     public override string ToString()
     {

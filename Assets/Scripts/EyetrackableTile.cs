@@ -70,7 +70,6 @@ public class EyetrackableTile : MonoBehaviour
                 _image.color += new Color(0, _colorInterval, 0, 0);
             }
 
-            Debug.Log(_image.color.g);
             if (_image.color.g >= 0.8f)
             {
                 _hasReachedMaxGreen = true;

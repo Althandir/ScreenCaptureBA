@@ -9,7 +9,7 @@ public class ScreenshotSystemWin : MonoBehaviour
 {
     [Header("Settings:")]
     [Tooltip("If the ScreenshotSystem should be started on immediately")]
-    public bool _StartOnAwake;
+    [SerializeField] bool _StartOnAwake;
     [Tooltip("Time between each Screenshot")]
     [Range(0.5f, 3)]
     [SerializeField] float _timeDelay = 0;
@@ -61,6 +61,7 @@ public class ScreenshotSystemWin : MonoBehaviour
     {
         _isActive = false;
         StopAllCoroutines();
+        Application.OpenURL(Application.persistentDataPath);
     }
     #endregion
     
