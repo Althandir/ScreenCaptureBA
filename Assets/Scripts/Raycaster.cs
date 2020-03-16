@@ -39,7 +39,6 @@ public class Raycaster : MonoBehaviour
                 {
                     Debug.Log("Eyedata valid");
                     hit2D = Physics2D.Raycast(_data.CombinedGazeRayScreen.origin, Vector2.zero );
-                    Debug.DrawLine(_data.CombinedGazeRayScreen.origin, Vector2.zero, Color.red, 100);
                     CheckHit2D(hit2D);
                 }
                 else if (_data.Left.GazePointValid)
