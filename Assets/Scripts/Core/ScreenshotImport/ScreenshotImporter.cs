@@ -72,8 +72,9 @@ public class ScreenshotImporter : MonoBehaviour
         {
             Debug.LogError(e);
         }
-        
+        finally
+        {
+            _lock = false;
+        }
     }
-
-
 }

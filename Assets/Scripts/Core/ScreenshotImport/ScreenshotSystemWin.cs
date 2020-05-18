@@ -8,7 +8,7 @@ using Tobii.Research.Unity;
 public class ScreenshotSystemWin : MonoBehaviour
 {
     [Header("Settings:")]
-    [Tooltip("If the ScreenshotSystem should be started on immediately")]
+    [Tooltip("If the ScreenshotSystem should be started immediately")]
     [SerializeField] bool _StartOnAwake;
     [Tooltip("Time between each Screenshot")]
     [Range(0.5f, 3)]
@@ -16,6 +16,8 @@ public class ScreenshotSystemWin : MonoBehaviour
 
     [Header("Debug:")]
     [SerializeField] private bool _isActive;
+    [SerializeField] private bool _justScreenImport;
+
     Process _screenCaptureProcess = new Process();
     IEnumerator _createScreenshotRoutine;
 
@@ -49,6 +51,7 @@ public class ScreenshotSystemWin : MonoBehaviour
         }
 
         Application.runInBackground = true;
+        _screenCaptureProcess.StartInfo.FileName = Application.streamingAssetsPath + "/ScreenCapture.exe";
 
         // Start Coroutine
         if (_StartOnAwake)
@@ -101,6 +104,11 @@ public class ScreenshotSystemWin : MonoBehaviour
                 break;
             }
 
+            if (_justScreenImport)
+            {
+                StartCoroutine(_createScreenshotRoutine);
+                break;
+            }
             yield return new WaitForSeconds(0.5f);
         }
     }
@@ -131,9 +139,8 @@ public class ScreenshotSystemWin : MonoBehaviour
                 {
                     yield return new WaitForSeconds(_timeDelay);
                     UnityEngine.Debug.Log("Waited " + _timeDelay + " seconds.");
-                    UnityEngine.Debug.Log("Capturing Screen...");
-                    _screenCaptureProcess.StartInfo.FileName = Application.streamingAssetsPath + "/ScreenCapture.exe";
-                    _screenCaptureProcess.Start();
+                    
+                    StartCaptureHelper();
 
                     yield return new WaitForSeconds(0.5f);
 
@@ -146,5 +153,9 @@ public class ScreenshotSystemWin : MonoBehaviour
         }
     }
 
-
+    void StartCaptureHelper()
+    {
+        UnityEngine.Debug.Log("Capturing Screen with helper...");
+        _screenCaptureProcess.Start();
+    }
 }

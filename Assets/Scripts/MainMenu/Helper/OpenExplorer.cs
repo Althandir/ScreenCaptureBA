@@ -11,7 +11,7 @@ public class OpenExplorer : MonoBehaviour
     protected string _path;
 
     [ContextMenu("Debug_Open")]
-    protected void Activate()
+    public void Open()
     {
         if (_path == string.Empty)
         {

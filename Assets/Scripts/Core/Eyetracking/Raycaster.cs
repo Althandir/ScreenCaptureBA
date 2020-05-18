@@ -37,7 +37,6 @@ public class Raycaster : MonoBehaviour
                 RaycastHit2D hit2D;
                 if (_data.CombinedGazeRayScreenValid)
                 {
-                    Debug.Log("Eyedata valid");
                     hit2D = Physics2D.Raycast(_data.CombinedGazeRayScreen.origin, Vector2.zero );
                     CheckHit2D(hit2D);
                 }
@@ -67,16 +66,12 @@ public class Raycaster : MonoBehaviour
 
     void CheckHit2D(RaycastHit2D hit2D)
     {
-        // If Raycast hit a 2DCollider...
         if (hit2D)
         {
             GameObject hitObject = hit2D.collider.gameObject;
-            // ... print GameObject name
             Debug.Log(hitObject.name);
-            // if GameObject is a EyetrackableTile ...
             if (hitObject.GetComponent<EyetrackableTile>())
             {
-                // TODO: Colorgrade Tile 
                 hitObject.GetComponent<EyetrackableTile>().ChangeColor();
             }
         }

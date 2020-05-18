@@ -12,7 +12,7 @@ public class PupilsCatcher : MonoBehaviour
 {
     string _path;
     const string _header = "Timestamp. LeftEye. RightEye";
-    const string _fileName = "PupilData.csv";
+    const string _fileName = "PupilSize.csv";
 
     StreamWriter _writer;
 
