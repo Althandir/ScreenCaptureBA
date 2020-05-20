@@ -23,6 +23,7 @@ public class EyetrackableTile : MonoBehaviour
         _rt = GetComponent<RectTransform>();
         _image = GetComponent<Image>();
         _col2D = GetComponent<BoxCollider2D>();
+        _image.color = new Color32(0, 0, 0, 156);
     }
 
     private void Start()
