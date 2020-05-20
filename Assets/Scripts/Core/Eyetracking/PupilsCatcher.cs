@@ -33,11 +33,12 @@ public class PupilsCatcher : MonoBehaviour
         if (!ScreenshotSystemSettings.Instance)
         {
             // _path = Application.persistentDataPath + "/debug/" + _fileName;
-            StartCoroutine(GetPath());
+            StartCoroutine(GetPath(false));
         }
         else if (ScreenshotSystemSettings.Instance.CatchPupils)
         {
-            // _path = Application.persistentDataPath + "/" + ScreenshotSystemSettings.Instance.OwnerName +"/"+ _fileName;
+            StartCoroutine(GetPath(false));
+            _path = Application.persistentDataPath + "/" + ScreenshotSystemSettings.Instance.OwnerName +"/"+ _fileName;
         }
         else if (!ScreenshotSystemSettings.Instance.CatchPupils)
         {
@@ -51,10 +52,17 @@ public class PupilsCatcher : MonoBehaviour
         */
     }
 
-    IEnumerator GetPath()
+    IEnumerator GetPath(bool settingsFound)
     {
-        yield return new WaitForSeconds(1);
-        _path = ScreenshotCamCapture.Instance.Path;
+        if (settingsFound)
+        {
+            _path = Application.persistentDataPath + "/" + ScreenshotSystemSettings.Instance.OwnerName;
+        }
+        else
+        {
+            yield return new WaitForSeconds(1);
+            _path = ScreenshotCamCapture.Instance.Path;
+        }
         _writer = new StreamWriter(_path +"/"+_fileName);
         _writer.WriteLine("sep=.");
         _writer.WriteLine(_header);
