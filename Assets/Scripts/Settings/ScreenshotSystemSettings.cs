@@ -163,6 +163,15 @@ public class SettingsData
     /// </summary>
     public bool catchPupils;
 
+    public SettingsData()
+    {
+        ownerName = "default";
+        gridAccuracy = 10;
+        timeDelay = 0.5f;
+        catchHeatmap = true;
+        catchPupils = true;
+    }
+
     public override string ToString()
     {
         return JsonUtility.ToJson(this);

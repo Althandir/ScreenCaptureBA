@@ -12,7 +12,7 @@ public class ScreenshotSystemWin : MonoBehaviour
     [SerializeField] bool _StartOnAwake;
     [Tooltip("Time between each Screenshot")]
     [Range(0.5f, 3)]
-    [SerializeField] float _timeDelay = 0;
+    [SerializeField] float _timeDelay = 0.5f;
 
     [Header("Debug:")]
     [SerializeField] private bool _isActive;

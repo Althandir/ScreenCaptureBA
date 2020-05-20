@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
+using Tobii.Research.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Tobii.Research.Unity;
 
 [RequireComponent(typeof(Button))]
 public class SceneChanger : MonoBehaviour
@@ -33,7 +31,7 @@ public class SceneChanger : MonoBehaviour
     {
 
         bool TrackBoxChecked = false;
-        while (!Calibration.Instance.LatestCalibrationSuccessful && !TrackBoxChecked)
+        while (!Calibration.Instance.LatestCalibrationSuccessful || !TrackBoxChecked)
         {
             yield return new WaitForSeconds(0.25f);
             if (TrackBoxGuide.Instance.TrackBoxGuideActive)

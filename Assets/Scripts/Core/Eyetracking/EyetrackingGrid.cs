@@ -20,7 +20,7 @@ public class EyetrackingGrid : MonoBehaviour
 
     void ReadSettings()
     {
-        if (_accuracy == 0 && ScreenshotSystemSettings.Instance)
+        if (ScreenshotSystemSettings.Instance)
         {
             _accuracy = ScreenshotSystemSettings.Instance.GridAccuracy;
         }

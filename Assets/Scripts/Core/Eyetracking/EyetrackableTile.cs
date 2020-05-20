@@ -44,7 +44,7 @@ public class EyetrackableTile : MonoBehaviour
 
     private void OnSaveHandler()
     {
-        _image.color = new Color32(0, 0, 0, 50);
+        _image.color = new Color32(0, 0, 0, 80);
         _hasReachedMaxGreen = false;
         _hasReachedMaxYellow = false;
         _hasReachedMaxRed = false;
