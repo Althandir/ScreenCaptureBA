@@ -37,7 +37,6 @@ public class ScreenshotImporter : MonoBehaviour
             Debug.LogWarning("Double ScreenshotImporter detected!");
             Destroy(this);
         }
-        // TODO::Problem with Build: Paths are not correct. In Build: Screenshot is saved one Directory above Application.dataPath
 
         _path = Application.streamingAssetsPath + "/LatestScreenshot.png";
 

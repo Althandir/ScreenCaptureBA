@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Tobii.Research.Unity;
+using UnityEngine;
 
 public class Raycaster : MonoBehaviour
 {

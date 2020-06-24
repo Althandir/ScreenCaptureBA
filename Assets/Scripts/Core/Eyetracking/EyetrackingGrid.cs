@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Draws the EyetrackingGrid on the imported screenshot.
@@ -60,7 +58,6 @@ public class EyetrackingGrid : MonoBehaviour
                 rectTransform.anchorMin = new Vector2(xMinValues[i], yMinValues[k]);
                 rectTransform.anchorMax = new Vector2(xMaxValues[i], yMaxValues[k]);
             }
-
         }
     }
 }

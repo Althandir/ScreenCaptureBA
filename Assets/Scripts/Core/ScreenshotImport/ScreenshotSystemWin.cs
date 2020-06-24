@@ -129,7 +129,6 @@ public class ScreenshotSystemWin : MonoBehaviour
             while (true)
             {
                 // If ScreenshotImporter is not ready or Systen is in Calibrationmode or System displays the Trackbox
-                // TODO: Create UI System for this! 
                 if (ScreenshotImporter.Instance.Locked || Calibration.Instance.CalibrationInProgress || TrackBoxGuide.Instance.TrackBoxGuideActive)
                 {
                     UnityEngine.Debug.LogWarning("ScreenImporter not ready || Calibration active || Trackbox active");
@@ -139,11 +138,8 @@ public class ScreenshotSystemWin : MonoBehaviour
                 {
                     yield return new WaitForSeconds(_timeDelay);
                     UnityEngine.Debug.Log("Waited " + _timeDelay + " seconds.");
-                    
                     StartCaptureHelper();
-
                     yield return new WaitForSeconds(0.5f);
-
                     ScreenshotImporter.Instance.ImportScreenshot();
                     UnityEngine.Debug.Log("Screen imported...");
                     ScreenshotCamCapture.Instance.CaptureWithHeatmap();
